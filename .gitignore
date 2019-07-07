@@ -18,6 +18,7 @@ pickle-email-*.html
 .DS_Store
 ._*
 /nbproject
+.byebug_history
 
 # Ignore mysql data created by docker
 /docker/*

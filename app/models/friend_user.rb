@@ -1,5 +1,6 @@
 class FriendUser < ApplicationRecord
   validate :validate_email
+  validates :email, presence: true
 
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
@@ -9,4 +10,9 @@ class FriendUser < ApplicationRecord
     end
   end
 
+  def self.create(args)
+    user = FriendUser.new(args)
+    # Also set api_key
+    return user
+  end
 end

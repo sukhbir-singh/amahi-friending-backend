@@ -1,26 +1,27 @@
 require 'securerandom'
 class FriendRequest < ApplicationRecord
-  # validate :validate_email
-  # validates :email, presence: true
-  # validates :pin, presence: true
   belongs_to :amahi_user
   belongs_to :system
 
-  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-
-  def validate_email
-    unless self.email =~ EMAIL_REGEX
-      self.errors.add(:base, "Email format is invalid")
-    end
+  def self.get_requests(user_id)
+    FriendRequest.where(amahi_user_id: user_id)
   end
 
   def self.create(args)
-    request = FriendRequest.new(args)
+    amahi_user = AmahiUser.where(email: args["email"]).first
+
+    if amahi_user.blank?
+      return "user does not exist", nil
+    end
+
+    request = FriendRequest.new()
     request.status = 0
-    request.last_requested_at = Time.now.to_s
+    request.amahi_user_id = amahi_user.id
+    request.pin = args["pin"]
     request.invite_token = SecureRandom.urlsafe_base64.to_s
-    # Also set api_key
-    return request
+    request.system_id = System.where(amahi_user_id: amahi_user.id).first.id rescue nil
+    request.last_requested_at = Time.now.to_s
+    return nil, request
   end
 
   def resend_request

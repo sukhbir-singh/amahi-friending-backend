@@ -2,12 +2,15 @@ class FriendRequestsController < ApplicationController
   before_action :set_request, only: [:resend_request, :delete_request]
 
   def index
-    render :json => {success: true, data: FriendRequest.all.as_json}
+    friend_requests = FriendRequest.get_requests(@system_user.amahi_user_id)
+    render :json => {success: true, data: friend_requests}
   end
 
   def create_request
-    request = FriendRequest.create(params_create_request(params))
-    if request.save
+    error, request = FriendRequest.create(params_create_request(params))
+    if error
+      render :json => {success: false, message: error}
+    elsif request.save
       # TODO: Send email invite
       render :json => {success: true, message: "new request created successfully", request: request}
     else
@@ -17,19 +20,27 @@ class FriendRequestsController < ApplicationController
 
   def resend_request
     unless @request.blank?
-      @request.resend_request
-      render :json => {success: true, message: "request resent successfully"}
+      if @request.amahi_user_id == @system_user.amahi_user_id
+        @request.resend_request
+        render :json => {success: true, message: "request resent successfully"}
+      else
+        render :json => {success: false, message: "not allowed"}
+      end
     else
-      render :json => {success: false, message: "request not found with provided id"}
+      render :json => {success: false, message: "request not found"}
     end
   end
 
   def delete_request
     unless @request.blank?
-      @request.delete
-      render :json => {success: true, message: "request deleted successfully"}
+      if @request.amahi_user_id == @system_user.amahi_user_id
+        @request.delete
+        render :json => {success: true, message: "request deleted successfully"}
+      else
+        render :json => {success: false, message: "not allowed"}
+      end
     else
-      render :json => {success: false, message: "request not found with provided id"}
+      render :json => {success: false, message: "request not found"}
     end
   end
 

@@ -12,8 +12,8 @@ development:
 
 test:
   <<: *default
-  database: db/friending_db
+  database: friending_db
 
 production:
   <<: *default
-  database: db/friending_db
+  database: friending_db

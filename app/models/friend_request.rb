@@ -1,8 +1,8 @@
 require 'securerandom'
 class FriendRequest < ApplicationRecord
-  validate :validate_email
-  validates :email, presence: true
-  validates :pin, presence: true
+  # validate :validate_email
+  # validates :email, presence: true
+  # validates :pin, presence: true
 
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 

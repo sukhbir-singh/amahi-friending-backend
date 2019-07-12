@@ -1,6 +1,6 @@
 class FriendUser < ApplicationRecord
-  validate :validate_email
-  validates :email, presence: true
+  # validate :validate_email
+  # validates :email, presence: true
 
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 

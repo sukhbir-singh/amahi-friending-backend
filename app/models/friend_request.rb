@@ -19,14 +19,14 @@ class FriendRequest < ApplicationRecord
     request.amahi_user_id = amahi_user.id
     request.pin = args["pin"]
     request.invite_token = SecureRandom.urlsafe_base64.to_s
-    request.system_id = System.where(amahi_user_id: amahi_user.id).first.id rescue nil
+    request.system_id = args["system_user"].id
     request.last_requested_at = Time.now.to_s
     return nil, request
   end
 
   def resend_request
     self.last_requested_at = Time.now.to_s
-    # send another email invite to user
+    UserMailer.invite_mail(self.amahi_user.email, self).deliver
     self.save
   end
 end

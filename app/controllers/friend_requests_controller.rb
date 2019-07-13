@@ -20,7 +20,7 @@ class FriendRequestsController < ApplicationController
 
   def resend_request
     unless @request.blank?
-      if @request.amahi_user_id == @system_user.amahi_user_id
+      if @request.system_id == @system_user.id
         @request.resend_request
         render :json => {success: true, message: "request resent successfully"}
       else
@@ -33,7 +33,7 @@ class FriendRequestsController < ApplicationController
 
   def delete_request
     unless @request.blank?
-      if @request.amahi_user_id == @system_user.amahi_user_id
+      if @request.system_id == @system_user.id
         @request.delete
         render :json => {success: true, message: "request deleted successfully"}
       else
@@ -46,7 +46,7 @@ class FriendRequestsController < ApplicationController
 
   private
   def params_create_request(params)
-    params.permit(:email, :pin)
+    params.permit(:email, :pin).merge({ system_user: @system_user })
   end
 
   def set_request

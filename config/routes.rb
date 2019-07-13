@@ -2,7 +2,6 @@ Rails.application.routes.draw do
     # friend user APIs
     get "frnd/users" => "friend_users#index"
     delete "frnd/user/:id" => "friend_users#delete_user"
-    post "frnd/user" => "friend_users#create_user" # for testing only
 
     # friend request APIs
     get "frnd/requests" => "friend_requests#index"

@@ -11,7 +11,7 @@ class FriendRequestsController < ApplicationController
     if error
       render :json => {success: false, message: error}
     elsif request.save
-      # TODO: Send email invite
+      UserMailer.invite_mail(params[:email], request).deliver
       render :json => {success: true, message: "new request created successfully", request: request}
     else
       render :json => {success: false, errors: request.errors.full_messages.as_json}

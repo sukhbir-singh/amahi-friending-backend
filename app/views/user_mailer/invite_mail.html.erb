@@ -1,0 +1,8 @@
+Hi <%= @parameters[:receiver_name] %>,<br>
+<%= @parameters[:sent_by] %> has sent you invite request for accessing amahi HDA using latest friending feature of Amahi 12. For accepting the invitation click on the below given link.<br><br>
+Activation link: <a href="https://localhost:5000/frnd/request/accept?invite_token=<%= @parameters[:invite_token] %>" target="_blank">https://localhost:5000/frnd/request/accept?invite_token=<%= @parameters[:invite_token] %></a><br>
+Pin for login: <%= @parameters[:pin] %><br><br>
+
+Thanks and Regards,<br>
+Amahi Team<br>
+<br>

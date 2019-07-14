@@ -8,4 +8,5 @@ Rails.application.routes.draw do
     delete "frnd/request/:id" => "friend_requests#delete_request"
     post "frnd/request" => "friend_requests#create_request"
     put "frnd/request/:id/resend" => "friend_requests#resend_request"
+    get "frnd/request/accept" => "friend_requests#accept_request"
 end

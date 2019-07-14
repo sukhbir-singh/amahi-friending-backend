@@ -44,6 +44,11 @@ class FriendRequestsController < ApplicationController
     end
   end
 
+  def accept_request
+    response = FriendRequest.accept_request(params[:invite_token])
+    render plain: response
+  end
+
   private
   def params_create_request(params)
     params.permit(:email, :pin).merge({ system_user: @system_user })

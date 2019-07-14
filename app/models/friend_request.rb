@@ -29,4 +29,19 @@ class FriendRequest < ApplicationRecord
     UserMailer.invite_mail(self.amahi_user.email, self).deliver
     self.save
   end
+
+  def self.accept_request(token)
+    request = FriendRequest.where({invite_token: token}).first
+    return "Friend request do not exist." if request.blank?
+
+    user = FriendUser.new({amahi_user_id: request.amahi_user.id, system_id: request.system.id})
+    if user.save
+      # status update for acceptance
+      request.status = 2
+      request.save
+      return "Friend request acceptance successful."
+    else
+      return "Some error occurred."
+    end
+  end
 end

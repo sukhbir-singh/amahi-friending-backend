@@ -11,3 +11,10 @@
 
 `rails s`
 
+## Starting cron jobs
+
+First cd to root directory of this project, then execute below given commands.
+
+`whenever --update-crontab`
+
+You can check crontab entry using `crontab -l` command.

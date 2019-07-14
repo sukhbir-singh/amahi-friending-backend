@@ -36,12 +36,12 @@ class FriendRequest < ApplicationRecord
 
     user = FriendUser.new({amahi_user_id: request.amahi_user.id, system_id: request.system.id})
     if user.save
-      # status update for acceptance
-      request.status = 2
+      request.status = 2 # status update for acceptance
       request.save
       return "Friend request acceptance successful."
     else
       return "Some error occurred."
     end
   end
+
 end

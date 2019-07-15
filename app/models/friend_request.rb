@@ -3,8 +3,16 @@ class FriendRequest < ApplicationRecord
   belongs_to :amahi_user
   belongs_to :system
 
-  def self.get_requests(user_id)
-    FriendRequest.where(amahi_user_id: user_id)
+  def self.get_requests(system_id)
+    requests = FriendRequest.where(system_id: system_id)
+    new_requests = []
+    requests.each do |request|
+      new_requests << request.as_json.merge({
+        email: request.amahi_user.email,
+        status_txt: self.status_mapper(request.status)
+      })
+    end
+    return new_requests
   end
 
   def self.create(args)
@@ -28,6 +36,20 @@ class FriendRequest < ApplicationRecord
     self.last_requested_at = Time.now.to_s
     UserMailer.invite_mail(self.amahi_user.email, self).deliver
     self.save
+  end
+
+  def self.status_mapper(status_code)
+    # status: active (0), expired (1), accepted (2), rejected (3)
+    case status_code
+      when 1
+        "Expired"
+      when 2
+        "Accepted"
+      when 3
+        "Rejected"
+      else
+        "Active"
+    end
   end
 
   def self.accept_request(token)

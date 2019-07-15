@@ -2,7 +2,7 @@ class FriendRequestsController < ApplicationController
   before_action :set_request, only: [:resend_request, :delete_request]
 
   def index
-    friend_requests = FriendRequest.get_requests(@system_user.amahi_user_id)
+    friend_requests = FriendRequest.get_requests(@system_user.id)
     render :json => {success: true, data: friend_requests}
   end
 

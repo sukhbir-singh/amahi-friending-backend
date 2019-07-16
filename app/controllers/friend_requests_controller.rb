@@ -12,7 +12,7 @@ class FriendRequestsController < ApplicationController
       render :json => {success: false, message: error}
     elsif request.save
       UserMailer.invite_mail(params[:email], request).deliver
-      render :json => {success: true, message: "new request created successfully", request: request}
+      render :json => {success: true, message: "new request created successfully", request: request.as_json.merge({status_txt: FriendRequest.status_mapper(request.status), email: params[:email]})}
     else
       render :json => {success: false, errors: request.errors.full_messages.as_json}
     end
@@ -45,7 +45,7 @@ class FriendRequestsController < ApplicationController
   end
 
   def accept_request
-    response = FriendRequest.accept_request(params[:invite_token])
+    response = FriendRequest.accept_request(params[:invite_token], params[:type])
     render plain: response
   end
 

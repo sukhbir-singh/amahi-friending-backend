@@ -1,6 +1,12 @@
 # Amahi Friending Backend
 
+## Requirements
+
+Ruby 2.3.4
+Rails 5.2
+
 ## Commands to run program
+
 `bundle install`
 
 `rake db:create`

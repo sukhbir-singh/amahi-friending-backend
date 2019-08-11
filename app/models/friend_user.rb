@@ -13,9 +13,4 @@ class FriendUser < ApplicationRecord
     return new_users
   end
 
-  def self.create(args)
-    user = FriendUser.new(args)
-    # Also set api_key
-    return user
-  end
 end

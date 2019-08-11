@@ -15,6 +15,8 @@ class FriendRequest < ApplicationRecord
     return new_requests
   end
 
+  # friend request status - meanings
+  # active (0), expired (1), accepted (2), rejected (3)
   def self.create(args)
     amahi_user = AmahiUser.where(email: args["email"]).first
 
@@ -56,7 +58,9 @@ class FriendRequest < ApplicationRecord
   def self.accept_request(token, type)
     request = FriendRequest.where({invite_token: token}).first
     return "Friend request do not exist." if request.blank?
-    return "Link expired." if (request.created_at != request.updated_at) || (Time.now().to_date - request.created_at.to_date).to_i >=2
+
+    # To expire invitation link after two days of sending invitation
+    return "Link expired." if (Time.now().to_date - request.last_requested_at.to_date).to_i >=2
 
     if type == "1" # accept invite
       user = FriendUser.new({amahi_user_id: request.amahi_user.id, system_id: request.system.id})

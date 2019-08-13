@@ -37,8 +37,8 @@ class FriendRequest < ApplicationRecord
   def resend_request
     self.last_requested_at = Time.now.to_s
     self.status = 0
-    UserMailer.invite_mail(self.amahi_user.email, self).deliver
     self.save
+    UserMailer.invite_mail(self.amahi_user.email, self).deliver
   end
 
   def self.status_mapper(status_code)
@@ -61,6 +61,9 @@ class FriendRequest < ApplicationRecord
 
     # To expire invitation link after two days of sending invitation
     return "Link expired." if (Time.now().to_date - request.last_requested_at.to_date).to_i >=2
+
+    # To prevent multiple clicking on accept/reject link
+    return "Link expired." if request.last_requested_at != request.updated_at
 
     if type == "1" # accept invite
       user = FriendUser.new({amahi_user_id: request.amahi_user.id, system_id: request.system.id})
